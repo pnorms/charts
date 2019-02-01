@@ -6,7 +6,7 @@
 We'll need to wait a few seconds for the Neo4j cluster to form.
 We need to see this line in all of our pods' logs:
 
-> Remote interface available at http://neo-helm-neo4j-core-2.neo-helm-neo4j.default.svc.cluster.local:7474/
+> Remote interface available at http://neo-helm-neo4j-core-2.neo-helm-neo4j.default.svc.cluster.local:{{ printf "%s" .Values.ports.containerPortBrowser }}/
 
 We can see the content of the logs by running the following command:
 

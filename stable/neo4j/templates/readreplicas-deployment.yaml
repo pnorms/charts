@@ -31,7 +31,7 @@ spec:
           - name: NEO4J_causal__clustering_discovery__type
             value: DNS
           - name: NEO4J_causal__clustering_initial__discovery__members
-            value: "{{ template "neo4j.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:5000"
+            value: "{{ template "neo4j.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ports.containerPortDiscovery }}"
           {{- if .Values.authEnabled }}
           - name: NEO4J_SECRETS_PASSWORD
             valueFrom:
@@ -47,7 +47,7 @@ spec:
           - "-c"
           - |
             export NEO4J_dbms_connectors_default__advertised__address=$(hostname -f)
-            export NEO4J_causal__clustering_transaction__advertised__address=$(hostname -f):6000
+            export NEO4J_causal__clustering_transaction__advertised__address=$(hostname -f):{{ .Values.ports.containerPortTx }}
 
             if [ "${AUTH_ENABLED:-}" == "true" ]; then
               export NEO4J_AUTH="neo4j/${NEO4J_SECRETS_PASSWORD}"
@@ -57,11 +57,11 @@ spec:
 
             exec /docker-entrypoint.sh "neo4j"
         ports:
-        - containerPort: 7474
+        - containerPort: {{ .Values.ports.containerPortBrowser }}
           name: browser
-        - containerPort: 7687
+        - containerPort: {{ .Values.ports.containerPortBolt }}
           name: bolt
-        - containerPort: 6000
+        - containerPort: {{ .Values.ports.containerPortTx }}
           name: tx
         volumeMounts:
         - name: plugins

@@ -29,6 +29,14 @@ clusterDomain: "cluster.local"
 testImage: "markhneedham/k8s-kubectl"
 testImageTag: "master"
 
+# Ports
+ports:
+  containerPortDiscovery: 5000
+  containerPortRaft: 7000
+  containerPortTx: 6000
+  containerPortBrowser: 7474
+  containerPortBolt: 7687
+
 # Cores
 core:
   numberOfServers: 3
